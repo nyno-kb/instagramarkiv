@@ -39,25 +39,15 @@
     }
 
     /* 3-COLUMN GRID */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      padding: 0 16px 32px;
-    }
-
-    /* Responsive breakpoints */
-    @media (max-width: 900px) {
-      .gallery {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 600px) {
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-    }
+   .gallery {
+  display: grid;
+  /* auto-fit = as many columns as will fit, min 220px wide */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 0 16px 32px;
+  max-width: 1200px;
+  margin: 0 auto; /* center the grid on large screens */
+}
 
     /* SINGLE Post*/
     .card {
