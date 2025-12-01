@@ -1,39 +1,69 @@
 <!doctype html><html><head><meta charset="UTF-8">
    <title>Instagram arkiv Det Kgl. Biblioteks Kønsforskningsservice</title>
 
-<body>
-  <header class="header">
-    <h1>Instagram arkiv</h1>
-    <p class="subtitle">Her kan du finde alle posts der er blevet slået op på instagram af profilen Kønsforskning Det Kgl. Bibliotek i perioden xxxxx</p>
-  </header>
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+}
 
-  <main class="gallery"></main>
+.header {
+  text-align: center;
+  padding: 2rem 1rem;
+}
 
-  <script>
-    fetch('captions.json')
-      .then(response => response.json())
-      .then(posts => {
-        const gallery = document.querySelector('.gallery');
+.subtitle {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #555;
+}
 
-        posts.forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'card';
+/* --- INSTAGRAM GRID --- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  padding: 20px;
+}
 
-          const img = item.output_image 
-            ? `<img src="${item.output_image}" alt="">`
-            : `<div class="missing">Image missing: ${item.image_basename}</div>`;
+/* Cards behave like IG posts */
+.card {
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
 
-          const caption = `
-            <div class="caption">${item.caption || "<i>No caption</i>"}</div>
-          `;
+/* Images always square like Instagram */
+.card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;       /* Perfect Instagram square */
+  object-fit: cover;
+}
 
-          card.innerHTML = img + caption;
-          gallery.appendChild(card);
-        });
-      });
-  </script>
+.caption {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.3;
+}
 
-</body>
+.missing {
+  background: #eee;
+  color: #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: 0.8rem;
+  padding: 10px;
+  text-align: center;
+}
+
 <div class="card"><img src="images/0001.png" alt=""><div class="caption">Drop ind og vær med til et åbent værksted.
 Vi er i lounge området i stueetage på Universitetsbiblioteket, Søndre Campus torsdag den 20. nov. 10-12 (og igen fredag den 5. dec. 13-15 til en særlig juleudgave).
 Her kan du eksperimentere med kreative måder at formidle historien om de første kvindelige akademikere i Danmark. Vi arbejder både fysisk og digitalt med billeder, tekst og data, og du får mulighed for at afprøve forskellige formater og metoder til at fortælle og dele historier.
