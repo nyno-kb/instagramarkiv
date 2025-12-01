@@ -1,68 +1,107 @@
 <!doctype html><html><head><meta charset="UTF-8">
-   <title>Instagram arkiv Det Kgl. Biblioteks Kønsforskningsservice</title>
+<head>
+  <meta charset="UTF-8">
+  <title>Instagram arkiv Det Kgl. Biblioteks Kønsforskningsservice</title>
 
-body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #fafafa;
-}
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fafafa;
+    }
 
-.header {
-  text-align: center;
-  padding: 2rem 1rem;
-}
+    .header {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
 
-.subtitle {
-  max-width: 600px;
-  margin: 0 auto;
-  color: #555;
-}
+    .subtitle {
+      max-width: 600px;
+      margin: 0 auto;
+      color: #555;
+    }
 
-/* --- INSTAGRAM GRID --- */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 10px;
-  padding: 20px;
-}
+    /* --- INSTAGRAM GRID --- */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
+      padding: 20px;
+    }
 
-/* Cards behave like IG posts */
-.card {
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-}
+    .card {
+      background: white;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* Images always square like Instagram */
-.card img {
-  width: 100%;
-  aspect-ratio: 1 / 1;       /* Perfect Instagram square */
-  object-fit: cover;
-}
+    .card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
 
-.caption {
-  padding: 0.75rem;
-  font-size: 0.9rem;
-  color: #333;
-  line-height: 1.3;
-}
+    .caption {
+      padding: 0.75rem;
+      font-size: 0.9rem;
+      color: #333;
+      line-height: 1.3;
+    }
 
-.missing {
-  background: #eee;
-  color: #777;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  font-size: 0.8rem;
-  padding: 10px;
-  text-align: center;
-}
+    .missing {
+      background: #eee;
+      color: #777;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      font-size: 0.8rem;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <h1>Instagram arkiv</h1>
+    <p class="subtitle">
+      Her kan du finde alle posts der er blevet slået op på instagram af profilen 
+      Kønsforskning Det Kgl. Bibliotek i perioden xxxxx
+    </p>
+  </header>
+
+  <main class="gallery"></main>
+
+  <script>
+    fetch('captions.json')
+      .then(response => response.json())
+      .then(posts => {
+        const gallery = document.querySelector('.gallery');
+
+        posts.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const img = item.output_image 
+            ? `<img src="${item.output_image}" alt="">`
+            : `<div class="missing">Image missing: ${item.image_basename}</div>`;
+
+          const caption = `
+            <div class="caption">${item.caption || "<i>No caption</i>"}</div>
+          `;
+
+          card.innerHTML = img + caption;
+          gallery.appendChild(card);
+        });
+      });
+  </script>
+</body>
 
 <div class="card"><img src="images/0001.png" alt=""><div class="caption">Drop ind og vær med til et åbent værksted.
 Vi er i lounge området i stueetage på Universitetsbiblioteket, Søndre Campus torsdag den 20. nov. 10-12 (og igen fredag den 5. dec. 13-15 til en særlig juleudgave).
