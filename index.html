@@ -100,91 +100,93 @@
   <main class="gallery"></main>
 
    <script>
-    function createCarousel(images) {
-      const carousel = document.createElement('div');
-      carousel.className = 'carousel';
+  function createCarousel(images) {
+    const carousel = document.createElement('div');
+    carousel.className = 'carousel';
 
-      const imgEl = document.createElement('img');
-      imgEl.src = images[0];
-      imgEl.alt = '';
+    const imgEl = document.createElement('img');
+    imgEl.src = images[0];
+    imgEl.alt = '';
 
-      const prevBtn = document.createElement('button');
-      prevBtn.className = 'carousel-button prev';
-      prevBtn.type = 'button';
-      prevBtn.innerText = '‹';
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'carousel-button prev';
+    prevBtn.type = 'button';
+    prevBtn.innerText = '‹';
 
-      const nextBtn = document.createElement('button');
-      nextBtn.className = 'carousel-button next';
-      nextBtn.type = 'button';
-      nextBtn.innerText = '›';
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'carousel-button next';
+    nextBtn.type = 'button';
+    nextBtn.innerText = '›';
 
-      const counter = document.createElement('div');
-      counter.className = 'carousel-counter';
-      counter.textContent = `1 / ${images.length}`;
+    const counter = document.createElement('div');
+    counter.className = 'carousel-counter';
+    counter.textContent = `1 / ${images.length}`;
 
-      let index = 0;
+    let index = 0;
 
-      function go(delta) {
-        index = (index + delta + images.length) % images.length;
-        imgEl.src = images[index];
-        counter.textContent = `${index + 1} / ${images.length}`;
-      }
-
-      prevBtn.addEventListener('click', () => go(-1));
-      nextBtn.addEventListener('click', () => go(1));
-
-      carousel.appendChild(imgEl);
-
-      if (images.length > 1) {
-        carousel.appendChild(prevBtn);
-        carousel.appendChild(nextBtn);
-        carousel.appendChild(counter);
-      }
-
-      return carousel;
+    function go(delta) {
+      index = (index + delta + images.length) % images.length;
+      imgEl.src = images[index];
+      counter.textContent = `${index + 1} / ${images.length}`;
     }
 
-    function renderPosts(posts) {
-      const gallery = document.querySelector('.gallery');
-      gallery.innerHTML = '';
+    prevBtn.addEventListener('click', () => go(-1));
+    nextBtn.addEventListener('click', () => go(1));
 
-      posts.forEach(item => {
-        const card = document.createElement('article');
-        card.className = 'card';
+    carousel.appendChild(imgEl);
 
-        // images array from captions.json, fallback to output_image
-        const images = Array.isArray(item.images) && item.images.length
-          ? item.images
-          : (item.output_image ? [item.output_image] : []);
-
-        if (images.length) {
-          const carousel = createCarousel(images);
-          card.appendChild(carousel);
-        } else {
-          const missing = document.createElement('div');
-          missing.className = 'missing';
-          missing.textContent = 'Billede mangler';
-          card.appendChild(missing);
-        }
-
-        const captionText = item.caption || '';
-        const captionEl = document.createElement('p');
-        captionEl.className = 'caption';
-        captionEl.textContent = captionText;
-
-        card.appendChild(captionEl);
-        gallery.appendChild(card);
-      });
+    // Only show buttons + counter if there is more than one image
+    if (images.length > 1) {
+      carousel.appendChild(prevBtn);
+      carousel.appendChild(nextBtn);
+      carousel.appendChild(counter);
     }
 
-    fetch('captions.json')
-      .then(r => r.json())
-      .then(renderPosts)
-      .catch(err => {
-        console.error(err);
-        document.querySelector('.gallery').innerHTML =
-          '<p>Kunne ikke indlæse opslag.</p>';
-      });
-  </script>
+    return carousel;
+  }
+
+  function renderPosts(posts) {
+    const gallery = document.querySelector('.gallery');
+    gallery.innerHTML = '';
+
+    // Optional: sort newest → oldest by creation_timestamp if present
+    posts.sort((a, b) => (b.creation_timestamp || 0) - (a.creation_timestamp || 0));
+
+    posts.forEach(item => {
+      // Normalize images: prefer item.images, fall back to output_image
+      let images = Array.isArray(item.images) ? item.images.slice() : [];
+      if (!images.length && item.output_image) {
+        images = [item.output_image];
+      }
+
+      // Skip posts with no usable images
+      if (!images.length) return;
+
+      const card = document.createElement('article');
+      card.className = 'card';
+
+      const carousel = createCarousel(images);
+      card.appendChild(carousel);
+
+      const captionText = item.caption || '';
+      const captionEl = document.createElement('p');
+      captionEl.className = 'caption';
+      captionEl.textContent = captionText;
+
+      card.appendChild(captionEl);
+      gallery.appendChild(card);
+    });
+  }
+
+  fetch('captions.json')
+    .then(r => r.json())
+    .then(renderPosts)
+    .catch(err => {
+      console.error(err);
+      document.querySelector('.gallery').innerHTML =
+        '<p>Kunne ikke indlæse opslag.</p>';
+    });
+</script>
+
 </body>
 </html>
