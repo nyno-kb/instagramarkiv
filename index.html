@@ -99,7 +99,51 @@
 
   <main class="gallery"></main>
 
-  <script>
+   <script>
+    function createCarousel(images) {
+      const carousel = document.createElement('div');
+      carousel.className = 'carousel';
+
+      const imgEl = document.createElement('img');
+      imgEl.src = images[0];
+      imgEl.alt = '';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'carousel-button prev';
+      prevBtn.type = 'button';
+      prevBtn.innerText = '‹';
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'carousel-button next';
+      nextBtn.type = 'button';
+      nextBtn.innerText = '›';
+
+      const counter = document.createElement('div');
+      counter.className = 'carousel-counter';
+      counter.textContent = `1 / ${images.length}`;
+
+      let index = 0;
+
+      function go(delta) {
+        index = (index + delta + images.length) % images.length;
+        imgEl.src = images[index];
+        counter.textContent = `${index + 1} / ${images.length}`;
+      }
+
+      prevBtn.addEventListener('click', () => go(-1));
+      nextBtn.addEventListener('click', () => go(1));
+
+      carousel.appendChild(imgEl);
+
+      if (images.length > 1) {
+        carousel.appendChild(prevBtn);
+        carousel.appendChild(nextBtn);
+        carousel.appendChild(counter);
+      }
+
+      return carousel;
+    }
+
     function renderPosts(posts) {
       const gallery = document.querySelector('.gallery');
       gallery.innerHTML = '';
@@ -108,20 +152,31 @@
         const card = document.createElement('article');
         card.className = 'card';
 
-        // Use your JSON fields:
-        const hasImage = item.found_on_disk && item.output_image;
-        const media = hasImage
-          ? `<img src="${item.output_image}" alt="">`
-          : `<div class="missing">Billede mangler: ${item.image_basename || ''}</div>`;
+        // images array from captions.json, fallback to output_image
+        const images = Array.isArray(item.images) && item.images.length
+          ? item.images
+          : (item.output_image ? [item.output_image] : []);
 
-        const caption = item.caption || '';
+        if (images.length) {
+          const carousel = createCarousel(images);
+          card.appendChild(carousel);
+        } else {
+          const missing = document.createElement('div');
+          missing.className = 'missing';
+          missing.textContent = 'Billede mangler';
+          card.appendChild(missing);
+        }
 
-        card.innerHTML = media + `<p class="caption">${caption}</p>`;
+        const captionText = item.caption || '';
+        const captionEl = document.createElement('p');
+        captionEl.className = 'caption';
+        captionEl.textContent = captionText;
+
+        card.appendChild(captionEl);
         gallery.appendChild(card);
       });
     }
 
-    // Load captions.json and render the grid
     fetch('captions.json')
       .then(r => r.json())
       .then(renderPosts)
