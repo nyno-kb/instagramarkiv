@@ -1,0 +1,54 @@
+{
+  "participants": [
+    {
+      "name": "Dorthe Chakravarty"
+    },
+    {
+      "name": "K\u00c3\u00b8nsforskning - Det Kongelige Bibliotek"
+    }
+  ],
+  "messages": [
+    {
+      "sender_name": "Dorthe Chakravarty",
+      "timestamp_ms": 1611907626356,
+      "content": "Liked a message",
+      "is_geoblocked_for_viewer": false,
+      "is_unsent_image_by_messenger_kid_parent": false
+    },
+    {
+      "sender_name": "K\u00c3\u00b8nsforskning - Det Kongelige Bibliotek",
+      "timestamp_ms": 1611907484787,
+      "content": "Tak Dorthe \u00f0\u009f\u0098\u008a",
+      "is_geoblocked_for_viewer": false,
+      "is_unsent_image_by_messenger_kid_parent": false
+    },
+    {
+      "sender_name": "K\u00c3\u00b8nsforskning - Det Kongelige Bibliotek",
+      "timestamp_ms": 1611907470494,
+      "reactions": [
+        {
+          "reaction": "\u00e2\u009d\u00a4\u00ef\u00b8\u008f",
+          "actor": "Dorthe Chakravarty",
+          "timestamp": 1611907626
+        }
+      ],
+      "share": {
+        "link": "https://instagram.com/stories/koensforskning_detkglbibliotek/2497183299697726773"
+      },
+      "is_geoblocked_for_viewer": false,
+      "is_unsent_image_by_messenger_kid_parent": false
+    },
+    {
+      "sender_name": "Dorthe Chakravarty",
+      "timestamp_ms": 1611906932121,
+      "is_geoblocked_for_viewer": false,
+      "is_unsent_image_by_messenger_kid_parent": false
+    }
+  ],
+  "title": "Dorthe Chakravarty",
+  "is_still_participant": true,
+  "thread_path": "inbox/dorthechakravarty_520238506033995",
+  "magic_words": [
+    
+  ]
+}
